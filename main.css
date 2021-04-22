@@ -1,0 +1,205 @@
+body{
+    text-align: center;
+}
+
+article{
+    text-align: left;
+    width: 50%;
+    margin: auto;
+}
+
+.title{
+    color: black;
+}
+
+p{
+    font-size: 20px;
+}
+
+/* for game */
+.game
+{
+    width: 75%;
+    border: solid 5px #381c00;
+    margin: 0 auto;
+    margin-top: 5px;
+    margin-bottom: 50px;
+    background-image: radial-gradient(#006633, #013f20);
+    padding: 30px;
+    padding-top: 5px;
+    text-align: center;
+    min-height: 430px;
+}
+
+.btnStart{
+    border:none;
+    padding: 10px 30px;
+    border-radius: 10px;
+    cursor:pointer;
+    background:#222;
+    color:white;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.btn{
+    border:none;
+    padding: 10px 30px;
+    border-radius:10px;
+    cursor:pointer;
+    background:#222;
+    color:white;
+    font-size: 16px;
+    font-weight: bold;
+    display: none;
+}
+
+.btnStart:hover, .btn:hover{
+    background: #972a27;
+}
+
+.game h3
+{
+padding: 10px;
+background:black;
+color:white;
+}
+
+.game .game-body {
+    padding: 20px;
+}
+
+.game-options
+{
+    text-align:center;
+    margin-bottom: 10px;
+    margin-top: 50px;
+}
+
+.game .card{
+    width: 100px;
+    height: 160px;
+    display: inline-block;
+    text-align: center;
+    margin: 5px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.game .status
+{
+    display: inline-block;
+    background: gold;
+    border: solid 5px white;
+    border-radius: 10px;
+    padding: 5px 20px;
+    margin: 0 auto;
+    margin-top: 10px;
+    display:none;
+}
+
+
+.players{
+    width: 49%;
+    margin-left: 0;
+    margin-top: 20px;
+    text-align: center;
+    display: inline-block;
+}
+
+.dealers{
+    width: 49%;
+    margin-right: 0;
+    margin-top: 20px;
+    text-align: center;
+    display: inline-block;
+}
+
+.player{
+    width: 90%;
+    display: inline-block;
+    margin:1%;
+    vertical-align: top;
+    background:none;
+    border: none;
+}
+
+h1{
+    text-align: center;
+    font-size: 40px;
+    font-weight: bold;
+    margin: 10px;
+    color: white;
+    min-height: 50px;
+    display: block;
+}
+
+.points{
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+    color: white;
+    min-height: 30px;
+    display: block;
+}
+
+.gameResult{
+    text-align: center;
+    font-size: 40px;
+    font-weight: bold;
+    margin: 10px;
+    color: white;
+    min-height: 50px;
+}
+
+.movePercent{
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+    margin: 10px;
+    color: white;
+    min-height: 40px;
+}
+
+
+img {
+    float: left;
+    height: 160px;
+    width: 100px;
+}
+
+/* div {
+    border: 1px solid cyan;
+} */
+
+.winPercentContainer {
+    margin-top: 10px;
+    width: 100%;
+    background-color: #006633;
+    border: 2px solid #381c00;
+    display: none;
+}
+  
+  
+.winPercentBar {min-width: 25%; background-color: #972a27;}
+
+.winPercent {
+    text-align: right;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-right: 10px;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* for hist */
+.axis {
+    font: 20px sans-serif;
+  }
+
+  .axis path,
+  .axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+  }
