@@ -1,365 +1,344 @@
+const suits = ['S', 'H', 'D', 'C'];
+const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+const deck = new Array();
+const players = new Array();
 
-        var suits = ["S", "H", "D", "C"];
-        var values = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"];
-        var deck = new Array();
-        var players = new Array();
+let agreement_data, winProbs, dealers;
 
-        // load data set
-        d3.csv("data/hand_value_averages.csv", function(data) {
-            data.forEach(function(d, i){
-                d.hand_value = +d.hand_value;
-                d.tookCard = (+d.tookCard * 100).toFixed(0);
-            });
-            agreement_data = data;
-        });
+// load data set
+d3.csv('data/hand_value_averages.csv', function (data) {
+  data.forEach(function (d) {
+    d.hand_value = +d.hand_value;
+    d.tookCard = (+d.tookCard * 100).toFixed(0);
+  });
+  agreement_data = data;
+});
 
-        d3.csv("data/winProbs.csv", function(data) {
-            data.forEach(function(d, i){
-                d.handValue = +d.handValue;
-            });
-            winProbs = data;
-        });
+d3.csv('data/winProbs.csv', function (data) {
+  data.forEach(function (d) {
+    d.handValue = +d.handValue;
+  });
+  winProbs = data;
+});
 
-        function createDeck()
-        {
-            deck = new Array();
-            for (var i = 0 ; i < values.length; i++)
-            {
-                for(var x = 0; x < suits.length; x++)
-                {
-                    var weight = parseInt(values[i]);
-                    if (values[i] == "J" || values[i] == "Q" || values[i] == "K")
-                        weight = 10;
-                    if (values[i] == "A")
-                        weight = 11;
-                    var card = { Value: values[i], Suit: suits[x], Weight: weight };
-                    deck.push(card);
-                }
-            }
-        }
+function createDeck() {
+  deck = new Array();
+  for (var i = 0; i < values.length; i++) {
+    for (var x = 0; x < suits.length; x++) {
+      var weight = parseInt(values[i]);
+      if (values[i] == 'J' || values[i] == 'Q' || values[i] == 'K') weight = 10;
+      if (values[i] == 'A') weight = 11;
+      var card = { Value: values[i], Suit: suits[x], Weight: weight };
+      deck.push(card);
+    }
+  }
+}
 
-        function createPlayer()
-        {
-            players = new Array();
-            var hand = new Array();
-            var player = { Name: 'Player', ID: 1, Points: 0, Hand: hand, hasAce: 0 };
-            players.push(player);
-        }
+function createPlayer() {
+  players = new Array();
+  var hand = new Array();
+  var player = { Name: 'Player', ID: 1, Points: 0, Hand: hand, hasAce: 0 };
+  players.push(player);
+}
 
-        function createDealer()
-        {
-            dealers = new Array();
-            var hand = new Array();
-            var dealer = { Name: 'Dealer', ID: 1, Points: 0, Hand: hand, hasAce: 0 };
-            dealers.push(dealer);
-        }
+function createDealer() {
+  dealers = new Array();
+  var hand = new Array();
+  var dealer = { Name: 'Dealer', ID: 1, Points: 0, Hand: hand, hasAce: 0 };
+  dealers.push(dealer);
+}
 
-        function createPlayersUI()
-        {
-            document.getElementById('players').innerHTML = '';
-           
-            var div_player = document.createElement('div');
+function createPlayersUI() {
+  document.getElementById('players').innerHTML = '';
 
-            var div_points = document.createElement('div');
-            var div_hand = document.createElement('div');
-            
+  var div_player = document.createElement('div');
 
-            div_points.className = 'points';
-            div_points.id = 'points_0';
-            div_player.id = 'player_0';
-            div_player.className = 'player';
-            div_hand.id = 'hand_0';
+  var div_points = document.createElement('div');
+  var div_hand = document.createElement('div');
 
-            var h = document.createElement("h1");
-            var t = document.createTextNode("Player");
-            h.appendChild(t);
-            div_player.appendChild(h);
+  div_points.className = 'points';
+  div_points.id = 'points_0';
+  div_player.id = 'player_0';
+  div_player.className = 'player';
+  div_hand.id = 'hand_0';
 
-            div_player.appendChild(div_points);
-            div_player.appendChild(div_hand);
-            document.getElementById('players').appendChild(div_player);
-            
-        }
+  var h = document.createElement('h1');
+  var t = document.createTextNode('Player');
+  h.appendChild(t);
+  div_player.appendChild(h);
 
-        function createDealersUI()
-        {
-            document.getElementById('dealers').innerHTML = '';
-           
-            var div_dealer = document.createElement('div');
+  div_player.appendChild(div_points);
+  div_player.appendChild(div_hand);
+  document.getElementById('players').appendChild(div_player);
+}
 
-            var div_points_dealer = document.createElement('div');
-            var div_hand_dealer = document.createElement('div');
-            
-            div_points_dealer.className = 'points';
-            div_points_dealer.id = 'points_dealer_0';
-            div_dealer.id = 'dealer_0';
-            div_dealer.className = 'player';
-            div_hand_dealer.id = 'hand_dealer_0';
+function createDealersUI() {
+  document.getElementById('dealers').innerHTML = '';
 
-            var h = document.createElement("h1");
-            var t = document.createTextNode("Dealer");
-            h.appendChild(t);
-            div_dealer.appendChild(h);
+  var div_dealer = document.createElement('div');
 
-            div_dealer.appendChild(div_points_dealer);
-            div_dealer.appendChild(div_hand_dealer);
-            document.getElementById('dealers').appendChild(div_dealer);
-            
-        }
+  var div_points_dealer = document.createElement('div');
+  var div_hand_dealer = document.createElement('div');
 
-        function shuffle()
-        {
-            // for 1000 turns
-            // switch the values of two random cards
-            for (var i = 0; i < 1000; i++)
-            {
-                var location1 = Math.floor((Math.random() * deck.length));
-                var location2 = Math.floor((Math.random() * deck.length));
-                var tmp = deck[location1];
+  div_points_dealer.className = 'points';
+  div_points_dealer.id = 'points_dealer_0';
+  div_dealer.id = 'dealer_0';
+  div_dealer.className = 'player';
+  div_hand_dealer.id = 'hand_dealer_0';
 
-                deck[location1] = deck[location2];
-                deck[location2] = tmp;
-            }
-        }
+  var h = document.createElement('h1');
+  var t = document.createTextNode('Dealer');
+  h.appendChild(t);
+  div_dealer.appendChild(h);
 
-        function startblackjack()
-        {
-            document.getElementById("gameResult").innerHTML = '';
-            document.getElementById("movePercent").innerHTML = '';
+  div_dealer.appendChild(div_points_dealer);
+  div_dealer.appendChild(div_hand_dealer);
+  document.getElementById('dealers').appendChild(div_dealer);
+}
 
-            document.getElementById('btnStart').value = 'RESTART';
-            document.getElementById("hitButton").disabled = false;
-            document.getElementById("standButton").disabled = false;
+function shuffle() {
+  // for 1000 turns
+  // switch the values of two random cards
+  for (var i = 0; i < 1000; i++) {
+    var location1 = Math.floor(Math.random() * deck.length);
+    var location2 = Math.floor(Math.random() * deck.length);
+    var tmp = deck[location1];
 
-            document.getElementById('btnStart').style.display = 'none';
-            document.getElementById("hitButton").style.display = 'inline-block';
-            document.getElementById("standButton").style.display = 'inline-block';
+    deck[location1] = deck[location2];
+    deck[location2] = tmp;
+  }
+}
 
-            document.getElementById("winPercentContainer").style.display = 'inline-block';
+function startblackjack() {
+  document.getElementById('gameResult').innerHTML = '';
+  document.getElementById('movePercent').innerHTML = '';
 
-            // deal 2 cards to every player object
-            createDeck();
-            shuffle();
-            createPlayer();
-            createDealer();
-            createPlayersUI();
-            createDealersUI();
-            dealHands();
-            document.getElementById('player_0').classList.add('active');
+  document.getElementById('btnStart').value = 'RESTART';
+  document.getElementById('hitButton').disabled = false;
+  document.getElementById('standButton').disabled = false;
 
-            check();
-        }
+  document.getElementById('btnStart').style.display = 'none';
+  document.getElementById('hitButton').style.display = 'inline-block';
+  document.getElementById('standButton').style.display = 'inline-block';
 
-        function dealHands()
-        {
-            // alternate handing cards to each player
-            // 2 cards each
-            for(var i = 0; i < 2; i++)
-            {
-                var card = deck.pop();
-                if (card.Value == "A"){players[0].hasAce=1};
-                players[0].Hand.push(card);
-                renderCard(card, 'player_0');
-                updatePoints();
-                
-                var card = deck.pop();
-                if (card.Value == "A"){dealers[0].hasAce=1};
-                dealers[0].Hand.push(card);
-                renderCard(card, 'dealer_0');
-                updatePoints();
-            }
+  document.getElementById('winPercentContainer').style.display = 'inline-block';
 
-        }
+  // deal 2 cards to every player object
+  createDeck();
+  shuffle();
+  createPlayer();
+  createDealer();
+  createPlayersUI();
+  createDealersUI();
+  dealHands();
+  document.getElementById('player_0').classList.add('active');
 
-        function renderCard(card, hand_id)
-        {
-            var hand = document.getElementById(hand_id);
-            hand.appendChild(getCardUI(card));
-        }
+  check();
+}
 
-        function getCardUI(card)
-        {   
-            var el = document.createElement('img');
+function dealHands() {
+  // alternate handing cards to each player
+  // 2 cards each
+  for (var i = 0; i < 2; i++) {
+    var card = deck.pop();
+    if (card.Value == 'A') {
+      players[0].hasAce = 1;
+    }
+    players[0].Hand.push(card);
+    renderCard(card, 'player_0');
+    updatePoints();
 
-            el.src = "card_imgs/" + card.Value + card.Suit + ".png";
-            
-            el.className = 'card';
-            //el.innerHTML = card.Value + '<br/>' + icon;
-            return el;
-        }
+    var card = deck.pop();
+    if (card.Value == 'A') {
+      dealers[0].hasAce = 1;
+    }
+    dealers[0].Hand.push(card);
+    renderCard(card, 'dealer_0');
+    updatePoints();
+  }
+}
 
-        // returns the number of points that a player has in hand
-        function getPoints()
-        {
-            // player
-            var points = 0;
-            for(var i = 0; i < players[0].Hand.length; i++)
-            {
-                points += players[0].Hand[i].Weight;
-            }
+function renderCard(card, hand_id) {
+  var hand = document.getElementById(hand_id);
+  hand.appendChild(getCardUI(card));
+}
 
-            // if a player has an Ace (value of 11), it can be considered value 1 to prevent bust
-            if (points > 21 && players[0].hasAce == 1){
-                points = points - 10;
-            }
+function getCardUI(card) {
+  var el = document.createElement('img');
 
-            players[0].Points = points;
+  el.src = 'card_imgs/' + card.Value + card.Suit + '.png';
 
-            // dealer
-            points = 0;
-            for(var i = 0; i < dealers[0].Hand.length; i++)
-            {
-                points += dealers[0].Hand[i].Weight;
-            }
+  el.className = 'card';
+  //el.innerHTML = card.Value + '<br/>' + icon;
+  return el;
+}
 
-            // if a dealer has an Ace (value of 11), it can be considered value 1 to prevent bust
-            if (points > 21 && dealers[0].hasAce == 1){
-                points = points - 10;
-            }
+// returns the number of points that a player has in hand
+function getPoints() {
+  // player
+  var points = 0;
+  for (var i = 0; i < players[0].Hand.length; i++) {
+    points += players[0].Hand[i].Weight;
+  }
 
-            dealers[0].Points = points;
-        }
+  // if a player has an Ace (value of 11), it can be considered value 1 to prevent bust
+  if (points > 21 && players[0].hasAce == 1) {
+    points = points - 10;
+  }
 
-        function updatePoints()
-        {   
-            getPoints();
-            document.getElementById('points_0').innerHTML = players[0].Points;
-            document.getElementById('points_dealer_0').innerHTML = dealers[0].Points; 
-        }
+  players[0].Points = points;
 
-        function dealerDraw()
-        {
-            // pop a card from the deck to the current player
-            // check if current player new points are over 21
-            var card = deck.pop();
-            if (card.Value == "A"){dealers[0].hasAce=1};
-            dealers[0].Hand.push(card);
-            renderCard(card, 'dealer_0');
-            updatePoints();
-            check();
-        }
+  // dealer
+  points = 0;
+  for (var i = 0; i < dealers[0].Hand.length; i++) {
+    points += dealers[0].Hand[i].Weight;
+  }
 
-        function hitMe()
-        {
+  // if a dealer has an Ace (value of 11), it can be considered value 1 to prevent bust
+  if (points > 21 && dealers[0].hasAce == 1) {
+    points = points - 10;
+  }
 
-            var alsoHit = agreement_data.filter(function(d){return d.hand_value==players[0].Points})[0].tookCard;
-            document.getElementById("movePercent").innerHTML = alsoHit + "% of players also would have taken another card";
+  dealers[0].Points = points;
+}
 
-            // pop a card from the deck to the current player
-            // check if current player new points are over 21
-            var card = deck.pop();
-            if (card.Value == "A"){players[0].hasAce=1};
-            players[0].Hand.push(card);
-            renderCard(card, 'player_0');
+function updatePoints() {
+  getPoints();
+  document.getElementById('points_0').innerHTML = players[0].Points;
+  document.getElementById('points_dealer_0').innerHTML = dealers[0].Points;
+}
 
-            if (dealers[0].Points < 17){
-                dealerDraw();
-            };
+function dealerDraw() {
+  // pop a card from the deck to the current player
+  // check if current player new points are over 21
+  var card = deck.pop();
+  if (card.Value == 'A') {
+    dealers[0].hasAce = 1;
+  }
+  dealers[0].Hand.push(card);
+  renderCard(card, 'dealer_0');
+  updatePoints();
+  check();
+}
 
-            updatePoints();
+function hitMe() {
+  var alsoHit = agreement_data.filter(function (d) {
+    return d.hand_value == players[0].Points;
+  })[0].tookCard;
+  document.getElementById('movePercent').innerHTML =
+    alsoHit + '% of players also would have taken another card';
 
-            check();
-        }
+  // pop a card from the deck to the current player
+  // check if current player new points are over 21
+  var card = deck.pop();
+  if (card.Value == 'A') {
+    players[0].hasAce = 1;
+  }
+  players[0].Hand.push(card);
+  renderCard(card, 'player_0');
 
-        function stay()
-        {
-            var wouldaHit = agreement_data.filter(function(d){return d.hand_value==players[0].Points})[0].tookCard;
-            var alsoStood = 100 - Number(wouldaHit);
-            document.getElementById("movePercent").innerHTML = alsoStood + "% of players also would have stayed";
+  if (dealers[0].Points < 17) {
+    dealerDraw();
+  }
 
-            document.getElementById("hitButton").disabled = true;
-            document.getElementById("standButton").disabled = true;
+  updatePoints();
 
-            document.getElementById('player_0').classList.remove('active');
-            document.getElementById('player_0').classList.add('active');
+  check();
+}
 
-            while (dealers[0].Points < 17){
-                dealerDraw();
-            };
+function stay() {
+  var wouldaHit = agreement_data.filter(function (d) {
+    return d.hand_value == players[0].Points;
+  })[0].tookCard;
+  var alsoStood = 100 - Number(wouldaHit);
+  document.getElementById('movePercent').innerHTML =
+    alsoStood + '% of players also would have stayed';
 
-            end();
-        }
+  document.getElementById('hitButton').disabled = true;
+  document.getElementById('standButton').disabled = true;
 
-        function updateWinPercent(gameOver=0, winProb)
-        {
-            if (gameOver == 0) { // game isn't over, update win probability using player hand value and data
-                // need to get player hand value
-                var someProbs = winProbs.filter(function(d){return d.handValue==players[0].Points})[0]
+  document.getElementById('player_0').classList.remove('active');
+  document.getElementById('player_0').classList.add('active');
 
-                // need to get round 
-                // round = number of cards player is holding - 1 (since round 1 starts with 2 cards)
-                var numCurrentCards = document.getElementById("player_0").getElementsByTagName("img").length;
-                
-                // need to cross reference with winProbs dataset
-                var winProb = ((someProbs["round" + (numCurrentCards - 1).toString()]) * 100).toFixed(0);
-            }
+  while (dealers[0].Points < 17) {
+    dealerDraw();
+  }
 
-            // update frontend
-            document.getElementById("winPer").innerHTML= "<span style='float:left; margin-left:10px;'>Likelihood Of Player Win</span>" + winProb.toString() + "%";
-            document.getElementById("winPer").style.width = winProb.toString() + "%";
+  end();
+}
 
-            return;
-        }
+function updateWinPercent(gameOver = 0, winProb) {
+  if (gameOver == 0) {
+    // game isn't over, update win probability using player hand value and data
+    // need to get player hand value
+    var someProbs = winProbs.filter(function (d) {
+      return d.handValue == players[0].Points;
+    })[0];
 
-        function end()
-        {
-            document.getElementById('btnStart').style.display = 'inline-block';
-            document.getElementById("hitButton").style.display = 'none';
-            document.getElementById("standButton").style.display = 'none';
+    // need to get round
+    // round = number of cards player is holding - 1 (since round 1 starts with 2 cards)
+    var numCurrentCards = document
+      .getElementById('player_0')
+      .getElementsByTagName('img').length;
 
-            getPoints();
+    // need to cross reference with winProbs dataset
+    var winProb = (
+      someProbs['round' + (numCurrentCards - 1).toString()] * 100
+    ).toFixed(0);
+  }
 
-            if (players[0].Points == 21){
-                document.getElementById("gameResult").innerHTML = "Blackjack!";
-            }
-            else if (players[0].Points > 21){
-                document.getElementById("gameResult").innerHTML = "Bust!";
-            }
-            else if (dealers[0].Points > 21){
-                document.getElementById("gameResult").innerHTML = "Dealer bust!";
-            }
-            else if (dealers[0].Points > players[0].Points){
-                document.getElementById("gameResult").innerHTML = "Dealer wins!";
-            }
-            else if (dealers[0].Points < players[0].Points){
-                document.getElementById("gameResult").innerHTML = "You win!";
-            }
-            else if (dealers[0].Points == players[0].Points){
-                document.getElementById("gameResult").innerHTML = "Push!";
-            }
+  // update frontend
+  document.getElementById('winPer').innerHTML =
+    '<span style='float:left; margin-left:10px;'>Likelihood Of Player Win</span>' +
+    winProb.toString() +
+    '%';
+  document.getElementById('winPer').style.width = winProb.toString() + '%';
 
-        }
+  return;
+}
 
-        function check()
-        {
-            if (players[0].Points > 21)
-            {
-                end();
-                updateWinPercent(1, "0");  
-                
-            }
-            else if (players[0].Points == 21)
-            {
-                end();
-                updateWinPercent(1, "100");
-            }
-            else if (dealers[0].Points > 21)
-            {
-                end();
-                updateWinPercent(1, "100");
-            }
-            else if (dealers[0].Points == 21)
-            {
-                end();
-                updateWinPercent(1, "0");
-            }
-            else{
-                updateWinPercent();
-            }
-        }
+function end() {
+  document.getElementById('btnStart').style.display = 'inline-block';
+  document.getElementById('hitButton').style.display = 'none';
+  document.getElementById('standButton').style.display = 'none';
 
-        window.addEventListener('load', function(){
-            createDeck();
-            shuffle();
-            createPlayer();
-        });
+  getPoints();
+
+  if (players[0].Points == 21) {
+    document.getElementById('gameResult').innerHTML = 'Blackjack!';
+  } else if (players[0].Points > 21) {
+    document.getElementById('gameResult').innerHTML = 'Bust!';
+  } else if (dealers[0].Points > 21) {
+    document.getElementById('gameResult').innerHTML = 'Dealer bust!';
+  } else if (dealers[0].Points > players[0].Points) {
+    document.getElementById('gameResult').innerHTML = 'Dealer wins!';
+  } else if (dealers[0].Points < players[0].Points) {
+    document.getElementById('gameResult').innerHTML = 'You win!';
+  } else if (dealers[0].Points == players[0].Points) {
+    document.getElementById('gameResult').innerHTML = 'Push!';
+  }
+}
+
+function check() {
+  if (players[0].Points > 21) {
+    end();
+    updateWinPercent(1, '0');
+  } else if (players[0].Points == 21) {
+    end();
+    updateWinPercent(1, '100');
+  } else if (dealers[0].Points > 21) {
+    end();
+    updateWinPercent(1, '100');
+  } else if (dealers[0].Points == 21) {
+    end();
+    updateWinPercent(1, '0');
+  } else {
+    updateWinPercent();
+  }
+}
+
+window.addEventListener('load', function () {
+  createDeck();
+  shuffle();
+  createPlayer();
+});
