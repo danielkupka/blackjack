@@ -1,4 +1,15 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  width: 100%;
+}
+
 body {
+  width: 100%;
   text-align: center;
   font: normal 12px Verdana, sans-serif;
   color: var(--text-black);
@@ -7,13 +18,15 @@ body {
   --lightblue: #c2defc;
   --text-black: #696969;
   --gray: #a0a0a0;
+  --green: green;
 }
 
 article {
   text-align: left;
   width: 100%;
   max-width: 900px;
-  margin: auto;
+  margin: 0 auto;
+  padding: 1rem;
 }
 
 .title {
@@ -21,6 +34,7 @@ article {
 }
 
 p {
+  margin: 1.5rem 0;
   font-size: 1rem;
   text-align: justify;
   line-height: 1.5;
@@ -38,8 +52,10 @@ em {
 
 /* for game */
 .game {
-  width: 75%;
-  border: solid 5px #381c00;
+  width: 100%;
+  max-width: 1100px;
+  border: solid 4px var(--blue);
+  border-radius: 7px;
   margin: 0 auto;
   margin-top: 5px;
   margin-bottom: 50px;
