@@ -148,7 +148,7 @@ d3.csv('data/bar-data.csv', function (error, data) {
 
   yLabel
     .append('path')
-    .attr('d', `M${x(10) - 7} 7q5 20 20 22`)
+    .attr('d', `M${x(10) - 7} 7q5 20 20 27`)
     .attr('marker-end', 'url(#arrowhead)');
 
   var labelPlayerLoses = svg
