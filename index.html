@@ -1,59 +1,128 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="main.css">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
-    </head>
-    <body>
-        <h1 class="title">Title</h1>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title></title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="main.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+  </head>
+  <body>
+    <h1 class="title">Title</h1>
 
-        <article>
-            <p>Of all the games found in a casino, blackjack is among the most popular, owing to its simple nature, low barrier to entry, and reputation as one of the few games with a low house edge. Blackjack, a card game against the dealer, revolves around the number 21: the dealer and players alike attempt to reach a hand value of 21 – or close to it – without going over, known as busting.</p>
-            <p>When a player is able to hit 21 using any combination of cards, they have hit a blackjack, and automatically win. Unfortunately for blackjack enthusiasts out there, winning the game by scoring 21 outright is fairly rare – for players, we only see a blackjack about 10.4% of the time.</p>
-            <p>Interesting enough, the most common final score for players is actually 20, just shy of the magic number. In fact, a player can expect to end with a score of 20 about 16.3% of the time. Although just short of a guaranteed win, 20 points will still win 70% of games and tie in another 18.5%, so being dealt two face cards isn’t anything to complain about.</p>
-            <p>Here’s how often players end at every value:</p>
-        </article>
+    <article>
+      <p>
+        Of all the games found in a casino, blackjack is among the most popular,
+        owing to its simple nature, low barrier to entry, and reputation as one
+        of the few games with a low house edge. Blackjack, a card game against
+        the dealer, revolves around the number <em>21</em>: the dealer and
+        players alike attempt to reach a hand value of <em>21</em> – or close to
+        it – without going over, known as busting.
+      </p>
+      <p>
+        When a player is able to hit <em>21</em> using any combination of cards,
+        they have hit a blackjack, and automatically win. Unfortunately for
+        blackjack enthusiasts out there, winning the game by scoring
+        <em>21</em> outright is fairly rare – for players, we only see a
+        blackjack about 10.4% of the time.
+      </p>
+      <p>
+        Interesting enough, the most common final score for players is actually
+        <em>20</em>, just shy of the magic number. In fact, a player can expect
+        to end with a score of <em>20</em> about 16.3% of the time.
+        Although just short of a guaranteed win, <em>20</em> points will still
+        win 70% of games and tie in another 18.5%, so being
+        dealt two face cards isn’t anything to complain about.
+      </p>
+      <p>Here’s how often players end at every value:</p>
+    </article>
 
-        <div id="hist"></div>
+    <div id="hist"></div>
 
-        <article>
-            <p>Blackjack, although a game of luck, involves very critical decisions: to say “hit me” or to “stand.” The decision can be easy: if you have a very low card total, you’ll almost always want to accept another; conversely, if you have a high total, another card is most likely to ruin your game. The tough decision making comes when players are sitting somewhere in the middle.</p>
-            <p>Think you have what it takes to beat the dealer? Try playing our blackjack simulator, and see just how often other players agree with your decisions:</p>
-        </article>
+    <article>
+      <p>
+        Blackjack, although a game of luck, involves very critical decisions: to
+        say "hit me" or to "stand". The decision can be easy: if you have a very
+        low card total, you'll almost always want to accept another; conversely,
+        if you have a high total, another card is most likely to ruin your game.
+        The tough decision making comes when players are sitting somewhere in
+        the middle.
+      </p>
+      <p>
+        Think you have what it takes to beat the dealer? Try playing our
+        blackjack simulator, and see just how often other players agree with
+        your decisions:
+      </p>
+    </article>
 
-        <div class="game-options">
-            <input type="button" id="btnStart" class="btnStart" value="START" onclick="startblackjack()">
-            <input type="button" class="btn" id="hitButton" value="HIT ME" onclick="hitMe()">
-            <input type="button" class="btn" id="standButton" value="STAY" onclick="stay()">
+    <div class="game-options">
+      <input
+        type="button"
+        id="btnStart"
+        class="btnStart"
+        value="START"
+        onclick="startblackjack()"
+      />
+      <input
+        type="button"
+        class="btn"
+        id="hitButton"
+        value="HIT ME"
+        onclick="hitMe()"
+      />
+      <input
+        type="button"
+        class="btn"
+        id="standButton"
+        value="STAY"
+        onclick="stay()"
+      />
+    </div>
+
+    <div class="game">
+      <h1 id="gameResult" class="gameResult"></h1>
+      <h2 id="movePercent" class="movePercent"></h2>
+
+      <div>
+        <div id="players" class="players"></div>
+        <div id="dealers" class="dealers"></div>
+      </div>
+
+      <div class="winPercentContainer" id="winPercentContainer">
+        <div class="winPercent winPercentBar" id="winPer">
+          <span style="float: left; margin-left: 10px"
+            >Likelihood Of Player Win</span
+          >85%
         </div>
+      </div>
+    </div>
 
-        <div class="game">
+    <article>
+      <p>
+        As you might have noticed in our blackjack simulator, the strategy of
+        most players is remarkably consistent: players universally say "hit me!"
+        when they're sitting at a value of <em>11</em> or less - since there is
+        no card in the deck that could cause them to bust at that point.
+        Meanwhile, not a single player with a hand value of <em>18</em> or
+        higher ever accepted a card. Even if there was a chance a player with a
+        hand of <em>18</em> could draw a <em>3</em> and win the game, they never
+        wanted to risk it.
+      </p>
+      <p>
+        The middleground we discussed earlier, where players really have to make
+        a tough call on wether to stay or take another card, is therefore a hand
+        value of <em>12</em> to <em>16</em>: most players actually stay even
+        when in this area, but there’s a sizeable group who are willing to risk
+        it. So if you often found yourself clicking "Hit Me" with a hand value
+        of <em>15</em> or <em>16</em>, you might just consider yourself a risk
+        taker! Of course, perhaps you’d think twice if your money was on the
+        line...
+      </p>
+    </article>
 
-            <h1 id="gameResult" class="gameResult"></h1>
-            <h2 id="movePercent" class="movePercent"></h2>
-            <!-- <img src="card_imgs/cardBack.png"/> -->
-
-            <div>
-                <div id="players" class="players"></div>
-                <div id="dealers" class="dealers"></div>
-            </div>
-
-            <div class="winPercentContainer" id="winPercentContainer">
-                <div class="winPercent winPercentBar" id="winPer"><span style="float:left; margin-left:10px;">Likelihood Of Player Win</span>85%</div>
-            </div>
-        </div>
-
-        <article>
-            <p>As you might have noticed in our blackjack simulator, the strategy of most players is remarkably consistent: players universally say “hit me!” when they’re sitting at a value of 11 or less - since there is no card in the deck that could cause them to bust at that point. Meanwhile, not a single player with a hand value of 18 or higher ever accepted a card. Even if there was a chance a player with a hand of 18 could draw a 3 and win the game, they never wanted to risk it.</p>
-            <p>The middleground we discussed earlier, where players really have to make a tough call on wether to stay or take another card, is therefore a hand value of 12-16: most players actually stay even when in this area, but there’s a sizeable group who are willing to risk it. So if you often found yourself clicking “Hit Me” with a hand value of 15 or 16, you might just consider yourself a risk taker! Of course, perhaps you’d think twice if your money was on the line...</p>
-        </article>
-
-        <script src="hist.js" async defer></script>
-        <script src="main.js" async defer></script>
-    </body>
+    <script src="hist.js" async defer></script>
+    <script src="main.js" async defer></script>
+  </body>
 </html>
