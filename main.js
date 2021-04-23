@@ -110,6 +110,8 @@ function shuffle() {
 }
 
 function startblackjack() {
+  toggleOverlay(false);
+
   document.getElementById("gameResult").innerHTML = "";
   document.getElementById("movePercent").innerHTML = "";
 
@@ -121,7 +123,8 @@ function startblackjack() {
   document.getElementById("hitButton").style.display = "inline-block";
   document.getElementById("standButton").style.display = "inline-block";
 
-  document.getElementById("winPercentContainer").style.display = "inline-block";
+  document.getElementById("winPercentLabel").style.display = "inline-block";
+  document.getElementById("winPercentContainer").style.display = "flex";
 
   // deal 2 cards to every player object
   createDeck();
@@ -161,6 +164,18 @@ function dealHands() {
 function renderCard(card, hand_id) {
   var hand = document.getElementById(hand_id);
   hand.appendChild(getCardUI(card));
+}
+
+function toggleOverlay(show) {
+  var overlay = document.getElementById('overlay');
+  var overlayContent = document.getElementById('overlay-content');
+  if (show) {
+    overlay.style.visibility = 'visible';
+    overlayContent.style.visibility = 'visible';
+  } else {
+    overlay.style.visibility = 'hidden';
+    overlayContent.style.visibility = 'hidden';
+  }
 }
 
 function getCardUI(card) {
@@ -288,12 +303,8 @@ function updateWinPercent(gameOver = 0, winProb) {
   }
 
   // update frontend
-  document.getElementById("winPer").innerHTML =
-    "<span style='float:left; margin-left:10px;'>Likelihood Of Player Win</span>" +
-    winProb.toString() +
-    "%";
-  document.getElementById("winPer").style.width = winProb.toString() + "%";
-
+  document.getElementById("winPer").style.left = (100 - winProb).toString() + "%";
+  document.getElementById("winPercentBarLabel").innerHTML = winProb.toString() + "%";
   return;
 }
 
@@ -303,6 +314,8 @@ function end() {
   document.getElementById("standButton").style.display = "none";
 
   getPoints();
+
+  toggleOverlay(true);
 
   if (players[0].Points == 21) {
     document.getElementById("gameResult").innerHTML = "Blackjack!";

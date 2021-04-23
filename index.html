@@ -83,22 +83,24 @@
     </div>
 
     <div class="game">
-      <div class="overlay"></div>
-      <div class="overlay-content">
+      <div class="overlay" id="overlay"></div>
+      <div class="overlay-content" id="overlay-content">
         <h1 id="gameResult" class="gameResult"></h1>
-        <h2 id="movePercent" class="movePercent"></h2>
       </div>
-
+      
       <div>
         <div id="players" class="players"></div>
         <div id="dealers" class="dealers"></div>
       </div>
-
+      
+      <div class="winPercentLabel" id="winPercentLabel">Likelihood of Player Win</div>
       <div class="winPercentContainer" id="winPercentContainer">
+        <div class="winPercentLine"></div>
         <div class="winPercent winPercentBar" id="winPer">
-          <span style="float: left; margin-left: 10px"></span>
+          <span class="winPercentBarLabel" id="winPercentBarLabel"></span>
         </div>
       </div>
+      <h2 id="movePercent" class="movePercent"></h2>
     </div>
 
     <article>

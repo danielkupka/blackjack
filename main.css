@@ -32,6 +32,9 @@ article {
 
 .title {
   color: var(--blue);
+  text-align: center;
+  font-size: 40px;
+  font-weight: bold;
 }
 
 h3 {
@@ -95,10 +98,12 @@ em {
   padding: 10px 30px;
   border-radius: 10px;
   cursor: pointer;
-  background: #222;
+  background: var(--blue);
   color: white;
   font-size: 16px;
   font-weight: bold;
+  border: 2px solid white;
+  transition: all 0.2s;
 }
 
 .btn {
@@ -106,16 +111,20 @@ em {
   padding: 10px 30px;
   border-radius: 10px;
   cursor: pointer;
-  background: var(--text-black);
+  background: var(--blue);
   color: white;
   font-size: 16px;
   font-weight: bold;
   display: none;
+  border: 2px solid white;
+  transition: all 0.2s;
 }
 
 .btnStart:hover,
 .btn:hover {
-  background: var(--blue);
+  color: var(--blue);
+  background-color: white;
+  border: 2px solid var(--blue);
 }
 
 .overlay {
@@ -126,7 +135,7 @@ em {
   width: 100%;
   height: 100%;
   background-color: var(--blue);
-  opacity: 0.9;
+  opacity: 0.8;
 }
 
 .overlay-content {
@@ -209,26 +218,21 @@ em {
   justify-content: center;
 }
 
-h1 {
-  text-align: center;
-  font-size: 40px;
-  font-weight: bold;
-  margin: 10px;
+.game h1 {
+  margin: 0 0 0.5rem 0;
+  font-size: 2.2rem;
+  font-weight: 400;
   color: white;
-  min-height: 50px;
-  display: block;
 }
 
 .points {
-  text-align: center;
-  font-size: 30px;
-  font-weight: bold;
+  margin: 0 0 0.5rem 0;
+  font-size: 1.8rem;
+  font-weight: 600;
   color: white;
-  min-height: 30px;
-  display: block;
 }
 
-.gameResult {
+h1.gameResult {
   text-align: center;
   font-size: 3rem;
   font-weight: bold;
@@ -238,13 +242,16 @@ h1 {
   min-height: 50px;
 }
 
-.movePercent {
+h2.movePercent {
+  position: absolute;
+  left: 0;
+  bottom: 0.7rem;
+  z-index: 30;
+  width: 100%;
   text-align: center;
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: 400;
-  margin: 10px;
   color: white;
-  min-height: 40px;
 }
 
 img {
@@ -257,21 +264,40 @@ img {
     border: 1px solid cyan;
 } */
 
-.winPercentContainer {
+.winPercentLabel {
   display: none;
-  margin-top: 10px;
+  margin: 1rem 0;
+  color:white;
+  font-size: 1.2rem;
+}
+
+.winPercentContainer {
+  position: relative;
+  display: none;
+  align-items: center;
+  justify-content: center;
   width: 100%;
-  background-color: white;
+  margin-bottom: 3rem;
+}
+
+.winPercentLine {
+  width: 100%;
+  height: 5px;
   border: none;
   border-radius: 3px;
+  background-color: white;
 }
 
 .winPercentBar {
-  min-width: 25%;
-  background-color: var(--blue);
+  position: absolute;
+  left: 50%;
+  z-index: 5;
+  width: 10px; 
+  height: 10px; 
   border: none;
   border-radius: 3px;
-  overflow: hidden;
+  background-color: white;
+  transform: translateX(-5px);
 }
 
 .winPercent {
@@ -282,6 +308,13 @@ img {
   color: white;
   font-size: 18px;
   font-weight: bold;
+}
+
+.winPercentBarLabel {
+  display: inline-block;
+  font-size: 0.9rem;
+  font-weight: 400;
+  transform: translateX(-40%) translateY(12px);
 }
 
 /* for hist */
