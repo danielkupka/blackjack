@@ -59,6 +59,7 @@ function createPlayersUI() {
   div_player.id = "player_0";
   div_player.className = "player";
   div_hand.id = "hand_0";
+  div_hand.className = "hand";
 
   var h = document.createElement("h1");
   var t = document.createTextNode("Player");
@@ -83,6 +84,7 @@ function createDealersUI() {
   div_dealer.id = "dealer_0";
   div_dealer.className = "player";
   div_hand_dealer.id = "hand_dealer_0";
+  div_hand_dealer.className = "hand";
 
   var h = document.createElement("h1");
   var t = document.createTextNode("Dealer");
@@ -143,7 +145,7 @@ function dealHands() {
       players[0].hasAce = 1;
     }
     players[0].Hand.push(card);
-    renderCard(card, "player_0");
+    renderCard(card, "hand_0");
     updatePoints();
 
     var card = deck.pop();
@@ -151,7 +153,7 @@ function dealHands() {
       dealers[0].hasAce = 1;
     }
     dealers[0].Hand.push(card);
-    renderCard(card, "dealer_0");
+    renderCard(card, "hand_dealer_0");
     updatePoints();
   }
 }
@@ -214,7 +216,7 @@ function dealerDraw() {
     dealers[0].hasAce = 1;
   }
   dealers[0].Hand.push(card);
-  renderCard(card, "dealer_0");
+  renderCard(card, "hand_dealer_0");
   updatePoints();
   check();
 }
@@ -233,7 +235,7 @@ function hitMe() {
     players[0].hasAce = 1;
   }
   players[0].Hand.push(card);
-  renderCard(card, "player_0");
+  renderCard(card, "hand_0");
 
   if (dealers[0].Points < 17) {
     dealerDraw();
@@ -276,7 +278,7 @@ function updateWinPercent(gameOver = 0, winProb) {
     // need to get round
     // round = number of cards player is holding - 1 (since round 1 starts with 2 cards)
     var numCurrentCards = document
-      .getElementById("player_0")
+      .getElementById("hand_0")
       .getElementsByTagName("img").length;
 
     // need to cross reference with winProbs dataset

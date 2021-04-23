@@ -16,6 +16,7 @@ body {
 
   --blue: #0a509c;
   --lightblue: #c2defc;
+  --mediumblue: #5ba0e9;
   --text-black: #696969;
   --gray: #a0a0a0;
   --green: green;
@@ -33,11 +34,33 @@ article {
   color: var(--blue);
 }
 
+h3 {
+  font-size: 1rem;
+  font-weight: 400;
+}
+
 p {
   margin: 1.5rem 0;
   font-size: 1rem;
   text-align: justify;
   line-height: 1.5;
+}
+
+p.methodology {
+  margin-top: 0.3rem;
+  color: rgb(133, 133, 133);
+  font-size: 0.9rem;
+}
+
+a {
+  color: rgb(133, 133, 133);
+  text-decoration: none;
+  border-bottom: 2px solid var(--mediumblue);
+  transition: color 0.2s;
+}
+
+a:hover {
+  color: var(--blue);
 }
 
 em {
@@ -52,6 +75,7 @@ em {
 
 /* for game */
 .game {
+  position: relative;
   width: 100%;
   max-width: 1100px;
   border: solid 4px var(--blue);
@@ -59,7 +83,7 @@ em {
   margin: 0 auto;
   margin-top: 5px;
   margin-bottom: 50px;
-  background-image: radial-gradient(#006633, #013f20);
+  background-image: radial-gradient(#5e8270, #9dc1af);
   padding: 30px;
   padding-top: 5px;
   text-align: center;
@@ -82,7 +106,7 @@ em {
   padding: 10px 30px;
   border-radius: 10px;
   cursor: pointer;
-  background: #222;
+  background: var(--text-black);
   color: white;
   font-size: 16px;
   font-weight: bold;
@@ -91,7 +115,31 @@ em {
 
 .btnStart:hover,
 .btn:hover {
-  background: #972a27;
+  background: var(--blue);
+}
+
+.overlay {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  background-color: var(--blue);
+  opacity: 0.9;
+}
+
+.overlay-content {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  opacity: 1;
 }
 
 .game h3 {
@@ -116,7 +164,7 @@ em {
   display: inline-block;
   text-align: center;
   margin: 5px;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 15px;
 }
 
 .game .status {
@@ -148,11 +196,17 @@ em {
 
 .player {
   width: 90%;
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
   margin: 1%;
   vertical-align: top;
   background: none;
   border: none;
+}
+
+.hand {
+  display: flex;
+  justify-content: center;
 }
 
 h1 {
@@ -176,8 +230,9 @@ h1 {
 
 .gameResult {
   text-align: center;
-  font-size: 40px;
+  font-size: 3rem;
   font-weight: bold;
+  letter-spacing: 0.4rem;
   margin: 10px;
   color: white;
   min-height: 50px;
@@ -185,8 +240,8 @@ h1 {
 
 .movePercent {
   text-align: center;
-  font-size: 30px;
-  font-weight: bold;
+  font-size: 2rem;
+  font-weight: 400;
   margin: 10px;
   color: white;
   min-height: 40px;
@@ -203,16 +258,20 @@ img {
 } */
 
 .winPercentContainer {
+  display: none;
   margin-top: 10px;
   width: 100%;
-  background-color: #006633;
-  border: 2px solid #381c00;
-  display: none;
+  background-color: white;
+  border: none;
+  border-radius: 3px;
 }
 
 .winPercentBar {
   min-width: 25%;
-  background-color: #972a27;
+  background-color: var(--blue);
+  border: none;
+  border-radius: 3px;
+  overflow: hidden;
 }
 
 .winPercent {
