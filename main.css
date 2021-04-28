@@ -10,6 +10,7 @@ html {
 
 body {
   width: 100%;
+  padding: 1rem 0;
   text-align: center;
   font: normal 12px Verdana, sans-serif;
   color: var(--text-black);
@@ -31,6 +32,9 @@ article {
 }
 
 .title {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
   color: var(--blue);
   text-align: center;
   font-size: 40px;
