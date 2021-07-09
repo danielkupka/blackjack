@@ -1,6 +1,6 @@
 function embed() {
 	let x = `
-		<iframe src="frame.html" style="height:800px;width:800px;border:0px;" title="Embeded Game"></iframe>
+		<iframe src="https://danielkupka.github.io/blackjack/frame.html" style="height:800px;width:800px;border:0px;" title="Embeded Game"></iframe>
 	`
 	copyElementText(x);
 	const embedId = document.getElementById("embedding");
