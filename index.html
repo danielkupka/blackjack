@@ -38,6 +38,8 @@
       />
     </div>
 
+
+
     <div class="game">
       <div class="overlay" id="overlay"></div>
       <div class="overlay-content" id="overlay-content">
@@ -58,7 +60,29 @@
       </div>
       <h2 id="movePercent" class="movePercent"></h2>
     </div>
-    
+
+
+
+
+		<div class="game-options">
+			<input
+        type="button"
+        id="embedButton"
+        class="btnStart"
+        value="EMBED GAME"
+				onClick="embed()"
+      />
+			<div id="embedding" class="embedSuccess hidden">
+				<p>The following iFrame has been copied to your clipboard. You can paste it on your website to display the game.</p><br>
+				<em>
+							&lt;iframe src="frame.html" style="height:800px;width:800px;border:0px;" title="Embeded Game"&gt;&lt;/iframe&gt;
+
+				</em>
+			</div>
+		</div>
+
+
+
     <article>
       <p>
         Of all the games found in a casino, blackjack is among the most popular,
@@ -136,5 +160,6 @@
 
     <script src="hist.js" async defer></script>
     <script src="main.js" async defer></script>
+		<script src="embed.js" async defer></script>
   </body>
 </html>

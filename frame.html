@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title></title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="main.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+  </head>
+  <body>
+    <div class="game-options">
+      <input
+        type="button"
+        id="btnStart"
+        class="btnStart"
+        value="START"
+        onclick="startblackjack()"
+      />
+      <input
+        type="button"
+        class="btn"
+        id="hitButton"
+        value="HIT ME"
+        onclick="hitMe()"
+      />
+      <input
+        type="button"
+        class="btn"
+        id="standButton"
+        value="STAY"
+        onclick="stay()"
+      />
+    </div>
+
+    <div class="game">
+      <div class="overlay" id="overlay"></div>
+      <div class="overlay-content" id="overlay-content">
+        <h1 id="gameResult" class="gameResult"></h1>
+      </div>
+
+      <div>
+        <div id="players" class="players"></div>
+        <div id="dealers" class="dealers"></div>
+      </div>
+
+      <div class="winPercentLabel" id="winPercentLabel">Likelihood of Player Win</div>
+      <div class="winPercentContainer" id="winPercentContainer">
+        <div class="winPercentLine"></div>
+        <div class="winPercent winPercentBar" id="winPer">
+          <span class="winPercentBarLabel" id="winPercentBarLabel"></span>
+        </div>
+      </div>
+      <h2 id="movePercent" class="movePercent"></h2>
+    </div>
+
+		
+    <script src="main.js" async defer></script>
+		<script src="embed.js" async defer></script>
+  </body>
+</html>

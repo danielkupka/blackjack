@@ -372,3 +372,16 @@ polygon {
   stroke: #000;
   shape-rendering: crispEdges;
 }
+
+/* for iframe */
+
+.embedSuccess > p {
+	text-align:left;
+	max-width: 500px;
+	margin: 0 auto;
+	margin-top: 20px;
+}
+
+.hidden {
+	display:none;
+}
